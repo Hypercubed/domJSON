@@ -25,15 +25,20 @@
     "domtree"
   ],
   "scripts": {
-    "coveralls": "gulp coveralls"
+    "coveralls": "gulp coveralls",
+    "browserify": "browserify src/domJSON.js -o dist/domJSON.js -s domJSON",
+    "build": "npm run browserify && gulp build",
+    "test": "npm run browserify && gulp unit-chrome"
   },
-  "main": "dist/domJSON.js",
+  "main": "src/domJSON.js",
   "files": [
+    "src/domJSON.js",
     "dist/domJSON.js",
     "dist/domJSON.min.js",
     "LICENSE.md"
   ],
   "devDependencies": {
+    "browserify": "^11.2.0",
     "fs-extra": "^0.14.0",
     "gulp": "~3.8.8",
     "gulp-concat": "~2.4.1",

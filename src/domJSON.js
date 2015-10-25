@@ -7,28 +7,7 @@
  * @license The MIT License: Copyright (c) 2013 Alex Zaslavsky
  */
 
-
-
-//Load the library
-;(function(root, factory) {
-	/* istanbul ignore next */
-	if (typeof define === 'function' && define.amd) { //AMD
-		define(function(){
-			return factory(root);
-		});
-	} else if (typeof exports !== 'undefined') { //CommonJS/node.js
-		var domJSON = factory(root);
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = domJSON;
-		}
-		exports = dmoJSON;
-	} else { //Browser global
-		window.domJSON = factory(root);
-	}
-})(this, function(win){
-	"use strict";
-
-	/** 
+	/**
 	 * domJSON is a global variable to store two methods: `.toJSON()` to convert a DOM Node into a JSON object, and `.toDOM()` to turn that JSON object back into a DOM Node
 	 * @namespace domJSON
 	 * @global
@@ -37,7 +16,7 @@
 
 
 
-	/** 
+	/**
 	 * An object specifying a list of fields and how to filter it, or an array with the first value being an optional boolean to convey the same information
 	 * @typedef {Object|Array} FilterList
 	 * @property {boolean} [exclude=false] If this is set to `true`, the `filter` property will specify which fields to exclude from the result (boolean difference), not which ones to include (boolean intersection)
@@ -46,20 +25,20 @@
 
 
 
-	/** 
+	/**
 	 * Default metadata for a JSON object
 	 * @private
 	 * @ignore
 	 */
 	var metadata = {
-		href: win.location.href || null,
+		href: window.location.href || null,
 		userAgent: window.navigator && window.navigator.userAgent ? window.navigator.userAgent : null,
 		version: '0.1.2'
 	};
-	
-	
-	
-	/** 
+
+
+
+	/**
 	 * Default options for creating the JSON object
 	 * @private
 	 * @ignore
@@ -82,7 +61,7 @@
 
 
 
-	/** 
+	/**
 	 * Default options for creating a DOM node from a previously generated domJSON object
 	 * @private
 	 * @ignore
@@ -93,7 +72,7 @@
 
 
 
-	/** 
+	/**
 	 * A list of disallowed HTMLElement tags - there is no flexibility here, these cannot be processed by domJSON for security reasons!
 	 * @private
 	 * @ignore
@@ -105,7 +84,7 @@
 
 
 
-	/** 
+	/**
 	 * A list of node properties that must be copied if they exist; there is no user option that will remove these
 	 * @private
 	 * @ignore
@@ -115,10 +94,10 @@
 		'nodeValue',
 		'tagName'
 	];
-	
-	
-	
-	/** 
+
+
+
+	/**
 	 * A list of node properties to specifically avoid simply copying; there is no user option that will allow these to be copied directly
 	 * @private
 	 * @ignore
@@ -131,10 +110,10 @@
 		'dataset',
 		'style'
 	];
-	
-	
-	
-	/** 
+
+
+
+	/**
 	 * A list of serialized read-only nodes to ignore; these can ovewritten if the user specifies the "filter" option
 	 * @private
 	 * @ignore
@@ -482,7 +461,7 @@
 		//Grab the computed style
 		var style, css = {};
 		if (opts.computedStyle && node.style instanceof CSSStyleDeclaration) {
-			style = win.getComputedStyle(node);
+			style = window.getComputedStyle(node);
 		} else {
 			return null;
 		}
@@ -498,9 +477,9 @@
 		//Filter the style object
 		return (opts.computedStyle instanceof Array) ? boolFilter(css, opts.computedStyle) : css;
 	};
-	
-	
-	
+
+
+
 	/**
 	 * Convert a single DOM Node into a simple object
 	 * @param {Node} node The DOM Node that will be converted
@@ -524,13 +503,13 @@
 		}
 
 		//Copy all attributes and styles, if allowed
-		if (opts.attributes && node.attributes) { 
+		if (opts.attributes && node.attributes) {
 			copy.attributes = attrJSON(node, opts);
 		}
 		if (opts.computedStyle && (style = styleJSON(node, opts))) {
 			copy.style = style;
 		}
-		
+
 		//Should we continue iterating?
 		if (opts.deep === true || (typeof opts.deep === 'number' && opts.deep > depth)) {
 			//We should!
@@ -549,9 +528,9 @@
 		}
 		return copy;
 	};
-	
-	
-	
+
+
+
 	/**
 	 * Take a DOM node and convert it to simple object literal (or JSON string) with no circular references and no functions or events
 	 * @param {Node} node The actual DOM Node which will be the starting point for parsing the DOM Tree
@@ -588,7 +567,7 @@
 		options.serialProperties = toShorthand(options.serialProperties);
 
 		//Make sure there is a base URL for absolute path conversions
-		options.absoluteBase = win.location.origin + '/';
+		options.absoluteBase = window.location.origin + '/';
 
 		//Make lists of which DOM properties to skip and/or which are absolutely necessary
 		if (options.serialProperties !== true) {
@@ -615,10 +594,10 @@
 				options.domProperties = [true].concat(ignoring);
 			}
 		}
-		
+
 		//Transform the node into an object literal
 		copy = toJSON(node, options, 0);
-		
+
 		//Wrap our copy object in a nice object of its own to save some metadata
 		if (options.metadata) {
 			output.meta = extend({}, metadata, {
@@ -640,7 +619,7 @@
 		} else {
 			output = copy;
 		}
-		
+
 		//If opts.stringify is true, turn the output object into a JSON string
 		if (options.stringify) {
 			return JSON.stringify(output);
@@ -797,5 +776,4 @@
 	domJSON.__toShorthand = toShorthand;
 	/* end-test-code */
 
-	return domJSON;
-});
+	module.exports = domJSON;

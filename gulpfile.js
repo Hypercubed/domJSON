@@ -119,7 +119,7 @@ gulp.task('docs', ['api'], function() {
 
 //Copy the original file to the dist folder
 gulp.task('copy', ['docs'], function() {
-	return gulp.src(['./src/domJSON.js'])
+	return gulp.src(['./dist/domJSON.js'])
 		.pipe(strip({
 			start_comment: 'test-code',
 			end_comment: 'end-test-code'
@@ -169,7 +169,7 @@ var customBump = function(semver, type) {
 //Build, and bump the version
 gulp.task('bump', ['build'], function() {
 	//var otherNames = args.otherNames.replace(/[\s]/gi, '').replace(',', '|').trim();
-	//var versionString = 'version' + otherNames.length ? '|' + otherNames : ''; 
+	//var versionString = 'version' + otherNames.length ? '|' + otherNames : '';
 
 	return gulp.src(['./package.json', './bower.json', '**/src/**/*.js', '**/dist/**/*.js'])
 		//Update jsDOC version: https://regex101.com/r/yE7oK1/1
