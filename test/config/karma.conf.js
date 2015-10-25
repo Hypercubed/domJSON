@@ -17,7 +17,7 @@ module.exports = function(config) {
     files: [
       'test/lib/polyfill/*.js',
       'test/lib/jquery-1.11.2.min.js',
-      'src/**/*.js',
+      'dist/domJSON.js',
       'test/spec/**/*.js',
     ],
 
